@@ -7,16 +7,23 @@ function getGridDimensions() {
 function makeGrid(height, width) {
     const pixelCanvas = $('#pixel_canvas');
 
-    // clear out a previous canvas if defined
+    // clear out any previous canvas
     pixelCanvas.empty();
 
+    // construct the new canvas
     for (let row = 0; row < height; row++) {
         pixelCanvas.append('<tr id="pixel-row-' + row + '"></tr>');
-        console.log(row);
 
         const pixelRow = $('#pixel-row-' + row);
+
+        const bgColor = $('#colorPicker').val();
+
         for (let col = 0; col < width; col++) {
-            pixelRow.append('<td id="pixel-col-' + col + '"></td>');
+            const pixelCoord = 'pixel-coord-' + row + '-' + col;
+            const pixelCell = document.createElement('td')
+            $(pixelCell).attr('id', pixelCoord);
+            $(pixelCell).css('background-color', bgColor)
+            pixelRow.append(pixelCell);
         }
     }
 }
