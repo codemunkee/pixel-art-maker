@@ -4,25 +4,30 @@ function getGridDimensions() {
     return [height, width];
 }
 
+function updateCellColor(pixelCell) {
+    $('#' + pixelCell.target.id).css('background-color', $('#colorPicker').val());
+}
+
 function makeGrid(height, width) {
-    const pixelCanvas = $('#pixel_canvas');
 
     // clear out any previous canvas
-    pixelCanvas.empty();
+    $('#pixel_canvas').empty();
 
-    // construct the new canvas
+    // then build the canvas
     for (let row = 0; row < height; row++) {
-        pixelCanvas.append('<tr id="pixel-row-' + row + '"></tr>');
-
-        const pixelRow = $('#pixel-row-' + row);
-
-        const bgColor = $('#colorPicker').val();
+        const pixelRow = document.createElement('tr');
+        $(pixelRow).attr('id', 'pixel-row-' + row);
+        $('#pixel_canvas').append(pixelRow);
 
         for (let col = 0; col < width; col++) {
             const pixelCoord = 'pixel-coord-' + row + '-' + col;
-            const pixelCell = document.createElement('td')
+            const pixelCell = document.createElement('td');
             $(pixelCell).attr('id', pixelCoord);
-            $(pixelCell).css('background-color', bgColor)
+            $(pixelCell).css('background-color', $('#colorPicker').val());
+
+            // add an event listener to the element so we can update its color
+            $(pixelCell).click((evt) => { updateCellColor(evt)});
+
             pixelRow.append(pixelCell);
         }
     }
@@ -33,8 +38,8 @@ $(() => {
     let [gridHeight, gridWidth] = getGridDimensions();
     makeGrid(gridHeight, gridWidth);
 
-    $('#sizePicker').submit((event) => {
-        event.preventDefault();
+    $('#sizePicker').submit((evt) => {
+        evt.preventDefault();
         [gridHeight, gridWidth] = getGridDimensions();
         makeGrid(gridHeight, gridWidth);
     })
